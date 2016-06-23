@@ -1,37 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/hidden_panel"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_hidden_panel_pickerui"
-    android:visibility="gone"
     android:layout_alignParentBottom="true"
-    android:background="@drawable/container_dropshadow"
     android:animateLayoutChanges="true"
-    tools:visibility="visible"
-    >
+    android:background="@drawable/container_dropshadow"
+    android:visibility="gone"
+    tools:visibility="visible">
 
-    <com.dpizarro.uipicker.library.picker.PickerUIListView
-        android:id="@+id/picker_ui_listview"
+    <RelativeLayout
+        android:id="@+id/picker_ui_controls"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/pickerui_item"
-        style="@style/PickerUI.ListView"
-        />
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/white"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/picker_ui_controls_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="ANNULLA"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/picker_ui_controls_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="SELEZIONA"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/black" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/picker_ui_controls"
+        android:orientation="horizontal">
+
+        <com.dpizarro.uipicker.library.picker.PickerUIListView
+            android:id="@+id/picker_ui_listview"
+            style="@style/PickerUI.ListView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:listitem="@layout/pickerui_item" />
+
+        <com.dpizarro.uipicker.library.picker.PickerUIListView
+            android:id="@+id/picker_ui_listview2"
+            style="@style/PickerUI.ListView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:listitem="@layout/pickerui_item" />
+    </LinearLayout>
+
 
     <View
         android:id="@+id/picker_line_top"
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/margin_top_line_top_pickerui"
         style="@style/line_center_default"
-        />
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/margin_top_line_top_pickerui" />
 
     <View
         android:id="@+id/picker_line_bottom"
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/margin_top_line_bottom_pickerui"
         style="@style/line_center_default"
-        />
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/margin_top_line_bottom_pickerui" />
 
 </RelativeLayout>

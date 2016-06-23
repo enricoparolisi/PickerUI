@@ -201,7 +201,7 @@ class PickerUIListView extends ListView {
      * @param position the position to select in the list and to set in the center
      * @param notify   indicates whether to notify the selection of an item
      */
-    private void selectListItem(final int position, final boolean notify) {
+    public void selectListItem(final int position, final boolean notify) {
         setSelection(position);
 
         if (notify) {
@@ -210,12 +210,10 @@ class PickerUIListView extends ListView {
                 @Override
                 public void run() {
                     //We need to give the adapter time to draw the views
-                    if (mItemClickListenerPickerUI == null) {
-                        throw new IllegalStateException(
-                                "You must assign a valid PickerUIListView.PickerUIItemClickListener first!");
+                    if (mItemClickListenerPickerUI != null) {
+                        mItemClickListenerPickerUI
+                                .onItemClickItemPickerUI(which, position, items.get(position));
                     }
-                    mItemClickListenerPickerUI
-                            .onItemClickItemPickerUI(which, position, items.get(position));
 
                 }
             }, 200);

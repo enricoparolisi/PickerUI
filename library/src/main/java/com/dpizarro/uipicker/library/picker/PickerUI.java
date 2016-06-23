@@ -18,6 +18,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +42,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
 
     private static final String LOG_TAG = PickerUI.class.getSimpleName();
 
-    private boolean autoDismiss     = PickerUISettings.DEFAULT_AUTO_DISMISS;
+    private boolean autoDismiss = PickerUISettings.DEFAULT_AUTO_DISMISS;
     private boolean itemsClickables = PickerUISettings.DEFAULT_ITEMS_CLICKABLES;
 
     private PickerUIItemClickListener mPickerUIListener;
@@ -50,12 +51,19 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
     private Context mContext;
     private List<String> items;
     private int position;
+    private int position2;
     private PickerUIBlurHelper mPickerUIBlurHelper;
     private int backgroundColorPanel;
     private int colorLines;
     private int mColorTextCenterListView;
     private int mColorTextNoCenterListView;
     private PickerUISettings mPickerUISettings;
+    private TextView mCancelButton;
+    private TextView mSelectButton;
+    private List<String> secondsItems;
+    private PickerUIListView mPickerSecondUIListView;
+    private PickerUISelectedItemsListener mItemsSelectedListenerPickerUI;
+
 
     /**
      * Default constructor
@@ -114,7 +122,25 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
         View view = inflater.inflate(R.layout.pickerui, this, true);
         mHiddenPanelPickerUI = view.findViewById(R.id.hidden_panel);
         mPickerUIListView = (PickerUIListView) view.findViewById(R.id.picker_ui_listview);
-
+        mPickerSecondUIListView = (PickerUIListView) view.findViewById(R.id.picker_ui_listview2);
+        mSelectButton = (TextView) view.findViewById(R.id.picker_ui_controls_select);
+        mCancelButton = (TextView) view.findViewById(R.id.picker_ui_controls_cancel);
+        mCancelButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hidePanelPickerUI();
+            }
+        });
+        mSelectButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemsSelectedListenerPickerUI.onItemsSelectedItemPickerUI(mPickerUIListView.getItemInListCenter() ,items.get(mPickerUIListView.getItemInListCenter()),
+                        mPickerSecondUIListView.getItemInListCenter(),secondsItems.get(mPickerSecondUIListView.getItemInListCenter()));
+                //mPickerUIListView.selectListItem(mPickerUIListView.getItemInListCenter(), true);
+                //mPickerSecondUIListView.selectListItem(mPickerSecondUIListView.getItemInListCenter(), true);
+                hidePanelPickerUI();
+            }
+        });
         setItemsClickables(itemsClickables);
         mPickerUIBlurHelper = new PickerUIBlurHelper(mContext, attrs);
         mPickerUIBlurHelper.setBlurFinishedListener(this);
@@ -164,10 +190,6 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
      * If slide up, the position is the half of the elements.
      */
     public void slide() {
-        int position = 0;
-        if (items != null) {
-            position = items.size() / 2;
-        }
         slide(position);
     }
 
@@ -194,10 +216,6 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
     public void slide(SLIDE slide) {
         if (slide == SLIDE.UP) {
             if (!isPanelShown()) {
-                int position = 0;
-                if (items != null) {
-                    position = items.size() / 2;
-                }
                 slideUp(position);
             }
         } else {
@@ -214,6 +232,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
     private void slideUp(int position) {
         //Render to do the blur effect
         this.position = position;
+        this.position2 = position;
         mPickerUIBlurHelper.render();
     }
 
@@ -284,6 +303,9 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
         if (mPickerUIListView != null && mPickerUIListView.getPickerUIAdapter() != null) {
             mPickerUIListView.getPickerUIAdapter().setItemsClickables(itemsClickables);
         }
+        if (mPickerSecondUIListView != null && mPickerSecondUIListView.getPickerUIAdapter() != null) {
+            mPickerSecondUIListView.getPickerUIAdapter().setItemsClickables(itemsClickables);
+        }
     }
 
     private void setTextColorsListView() {
@@ -309,6 +331,18 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
 
     /**
      * Method to set items to show in panel.
+     * In this method, by default, the 'which' is 0 and the position is the half of the elements.
+     *
+     * @param items elements to show in panel
+     */
+    public void setSecondaryItems(Context context, List<String> items) {
+        if (items != null) {
+            setSecondaryItems(context, items, 0, items.size() / 2);
+        }
+    }
+
+    /**
+     * Method to set items to show in panel.
      *
      * @param context  {@link PickerUIListView} needs a context
      * @param items    elements to show in panel
@@ -319,6 +353,22 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
         if (items != null) {
             this.items = items;
             mPickerUIListView.setItems(context, items, which, position, itemsClickables);
+            setTextColorsListView();
+        }
+    }
+
+    /**
+     * Method to set items to show in panel.
+     *
+     * @param context  {@link PickerUIListView} needs a context
+     * @param items    elements to show in panel
+     * @param which    id of the element has been clicked
+     * @param position the position to set in the center of the panel.
+     */
+    public void setSecondaryItems(Context context, List<String> items, int which, int position) {
+        if (items != null) {
+            this.secondsItems = items;
+            mPickerSecondUIListView.setItems(context, items, which, position, itemsClickables);
             setTextColorsListView();
         }
     }
@@ -361,7 +411,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
 
     /**
      * Apply custom down scale factor
-     *
+     * <p>
      * By default down scale factor is set to {@link PickerUIBlur#MIN_DOWNSCALE}
      *
      * @param downScaleFactor Factor customized down scale factor, must be at least 1.0
@@ -374,7 +424,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
 
     /**
      * Select your preferred blur radius to apply
-     *
+     * <p>
      * By default blur radius is set to {@link PickerUIBlur#MIN_BLUR_RADIUS}
      *
      * @param radius The radius to blur the image, radius must be at least 1
@@ -413,6 +463,17 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
             mColorTextCenterListView = newColor;
             mPickerUIListView.getPickerUIAdapter().setColorTextCenter(newColor);
         }
+        if (mPickerSecondUIListView != null && mPickerSecondUIListView.getPickerUIAdapter() != null) {
+
+            int newColor;
+            try {
+                newColor = getResources().getColor(color);
+            } catch (Resources.NotFoundException e) {
+                newColor = color;
+            }
+            mColorTextCenterListView = newColor;
+            mPickerSecondUIListView.getPickerUIAdapter().setColorTextCenter(newColor);
+        }
     }
 
     /**
@@ -430,6 +491,16 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
             }
             mColorTextNoCenterListView = newColor;
             mPickerUIListView.getPickerUIAdapter().setColorTextNoCenter(newColor);
+        }
+        if (mPickerSecondUIListView != null && mPickerSecondUIListView.getPickerUIAdapter() != null) {
+            int newColor;
+            try {
+                newColor = getResources().getColor(color);
+            } catch (Resources.NotFoundException e) {
+                newColor = color;
+            }
+            mColorTextNoCenterListView = newColor;
+            mPickerSecondUIListView.getPickerUIAdapter().setColorTextNoCenter(newColor);
         }
     }
 
@@ -450,6 +521,10 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
                 if (mPickerUIListView != null && mPickerUIListView.getPickerUIAdapter() != null) {
                     mPickerUIListView.getPickerUIAdapter().handleSelectEvent(position + 2);
                     mPickerUIListView.setSelection(position);
+                }
+                if (mPickerSecondUIListView != null && mPickerSecondUIListView.getPickerUIAdapter() != null) {
+                    mPickerSecondUIListView.getPickerUIAdapter().handleSelectEvent(position + 2);
+                    mPickerSecondUIListView.setSelection(position2);
                 }
             }
 
@@ -501,7 +576,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
                 new PickerUIListView.PickerUIItemClickListener() {
                     @Override
                     public void onItemClickItemPickerUI(int which, int position,
-                            String valueResult) {
+                                                        String valueResult) {
                         if (autoDismiss) {
                             slide(position);
                         }
@@ -513,6 +588,24 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
                         mPickerUIListener.onItemClickPickerUI(which, position, valueResult);
                     }
                 });
+
+        if (mPickerSecondUIListView != null)
+            mPickerSecondUIListView.setOnClickItemPickerUIListener(
+                    new PickerUIListView.PickerUIItemClickListener() {
+                        @Override
+                        public void onItemClickItemPickerUI(int which, int position,
+                                                            String valueResult) {
+                            if (autoDismiss) {
+                                slide(position);
+                            }
+
+                            if (mPickerUIListener == null) {
+                                throw new IllegalStateException(
+                                        "You must assign a valid PickerUI.PickerUIItemClickListener first!");
+                            }
+                            mPickerUIListener.onItemClickPickerUI(which, position, valueResult);
+                        }
+                    });
     }
 
     /**
@@ -548,6 +641,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
         //save everything
         bundle.putBoolean("stateIsPanelShown", isPanelShown());
         bundle.putInt("statePosition", mPickerUIListView.getItemInListCenter());
+        bundle.putInt("statePosition2", mPickerSecondUIListView.getItemInListCenter());
         return bundle;
     }
 
@@ -561,7 +655,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
             Bundle bundle = (Bundle) state;
             //load everything
             PickerUISettings pickerUISettings = bundle.getParcelable("stateSettings");
-            if(pickerUISettings!=null){
+            if (pickerUISettings != null) {
                 setSettings(pickerUISettings);
             }
 
@@ -612,6 +706,15 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
          * @param valueResult Value of text of the current item.
          */
         public void onItemClickPickerUI(int which, int position, String valueResult);
+    }
+
+    public void setOnSelectedItemsPickerUIListener(PickerUISelectedItemsListener listener) {
+        this.mItemsSelectedListenerPickerUI = listener;
+    }
+
+    public interface PickerUISelectedItemsListener {
+
+        void onItemsSelectedItemPickerUI(int position, String valueResult,int position2, String valueResult2);
     }
 
 }

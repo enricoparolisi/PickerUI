@@ -40,3 +40,4 @@ gradle.properties
 UIPickerLibrary.iml
 .idea/misc.xml
 
+.idea/

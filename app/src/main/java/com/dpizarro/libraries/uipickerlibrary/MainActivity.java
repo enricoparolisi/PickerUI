@@ -42,6 +42,7 @@ public class MainActivity extends ActionBarActivity {
 
         //Populate list
         mPickerUI.setItems(this, options);
+        mPickerUI.setSecondaryItems(this, options);
         mPickerUI.setColorTextCenter(R.color.background_picker);
         mPickerUI.setColorTextNoCenter(R.color.background_picker);
         mPickerUI.setBackgroundColorPanel(R.color.background_picker);
@@ -49,15 +50,13 @@ public class MainActivity extends ActionBarActivity {
         mPickerUI.setItemsClickables(false);
         mPickerUI.setAutoDismiss(false);
 
-        mPickerUI.setOnClickItemPickerUIListener(
-                new PickerUI.PickerUIItemClickListener() {
+        mPickerUI.setOnSelectedItemsPickerUIListener(new PickerUI.PickerUISelectedItemsListener() {
+            @Override
+            public void onItemsSelectedItemPickerUI(int position, String valueResult, int position2, String valueResult2) {
+                Toast.makeText(MainActivity.this, valueResult + " " + valueResult2, Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    public void onItemClickPickerUI(int which, int position, String valueResult) {
-                        currentPosition = position;
-                        Toast.makeText(MainActivity.this, valueResult, Toast.LENGTH_SHORT).show();
-                    }
-                });
+            }
+        });
 
     }
 
