@@ -4,6 +4,7 @@ import com.dpizarro.uipicker.library.R;
 import com.dpizarro.uipicker.library.blur.PickerUIBlur;
 import com.dpizarro.uipicker.library.blur.PickerUIBlurHelper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -12,11 +13,14 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,6 +43,10 @@ import java.util.List;
  * limitations under the License.
  */
 public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurFinishedListener {
+
+    private final FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM
+    );
 
     private static final String LOG_TAG = PickerUI.class.getSimpleName();
 
@@ -63,6 +71,9 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
     private List<String> secondsItems;
     private PickerUIListView mPickerSecondUIListView;
     private PickerUISelectedItemsListener mItemsSelectedListenerPickerUI;
+    private ViewGroup decorView;
+    private ViewGroup rootView;
+    private View view;
 
 
     /**
@@ -106,6 +117,10 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
         }
     }
 
+    private void onAttached(View view) {
+        decorView.addView(view);
+    }
+
     /**
      * This method inflates the panel to be visible from Preview Layout
      */
@@ -119,7 +134,11 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
     private void createView(AttributeSet attrs) {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.pickerui, this, true);
+        decorView = (ViewGroup) ((Activity)mContext).getWindow().getDecorView().findViewById(android.R.id.content);
+        view = inflater.inflate(R.layout.pickerui, decorView, false);
+        view.setLayoutParams( new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, (int) mContext.getResources().getDimension(R.dimen.height_hidden_panel_pickerui), Gravity.BOTTOM
+        ));
         mHiddenPanelPickerUI = view.findViewById(R.id.hidden_panel);
         mPickerUIListView = (PickerUIListView) view.findViewById(R.id.picker_ui_listview);
         mPickerSecondUIListView = (PickerUIListView) view.findViewById(R.id.picker_ui_listview2);
@@ -151,6 +170,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
         setItemsClickables(itemsClickables);
         mPickerUIBlurHelper = new PickerUIBlurHelper(mContext, attrs);
         mPickerUIBlurHelper.setBlurFinishedListener(this);
+
     }
 
     /**
@@ -242,6 +262,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
         this.position = position;
         this.position2 = position;
         mPickerUIBlurHelper.render();
+        onAttached(view);
     }
 
     /**
@@ -259,6 +280,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
 
             @Override
             public void onAnimationEnd(Animation animation) {
+                decorView.removeView(view);
 
                 // Hide the panel
                 mHiddenPanelPickerUI.setVisibility(View.GONE);

@@ -62,7 +62,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void findViews() {
         btSlide = (Button) findViewById(R.id.bt_slide);
-        mPickerUI = (PickerUI) findViewById(R.id.picker_ui_view);
+        mPickerUI = new PickerUI(this);
         mRandomColor = (CheckBox) findViewById(R.id.cb_random_color);
         mUseBlur = (CheckBox) findViewById(R.id.cb_use_blur);
         mItemsClickables = (CheckBox) findViewById(R.id.cb_items_clickables);
