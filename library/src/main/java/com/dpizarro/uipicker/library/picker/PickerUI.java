@@ -134,8 +134,15 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
         mSelectButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                int position = 0;
+                String secondItems = "";
+                if(secondsItems != null) {
+                    position = mPickerSecondUIListView.getItemInListCenter();
+                    secondItems = secondsItems.get(position);
+                }
                 mItemsSelectedListenerPickerUI.onItemsSelectedItemPickerUI(mPickerUIListView.getItemInListCenter() ,items.get(mPickerUIListView.getItemInListCenter()),
-                        mPickerSecondUIListView.getItemInListCenter(),secondsItems.get(mPickerSecondUIListView.getItemInListCenter()));
+                        position,secondItems);
                 //mPickerUIListView.selectListItem(mPickerUIListView.getItemInListCenter(), true);
                 //mPickerSecondUIListView.selectListItem(mPickerSecondUIListView.getItemInListCenter(), true);
                 hidePanelPickerUI();
@@ -337,6 +344,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
      */
     public void setSecondaryItems(Context context, List<String> items) {
         if (items != null) {
+            mPickerSecondUIListView.setVisibility(VISIBLE);
             setSecondaryItems(context, items, 0, items.size() / 2);
         }
     }
