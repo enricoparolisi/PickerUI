@@ -161,25 +161,26 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
 
         if (typedArray != null) {
             try {
+
                 autoDismiss = typedArray
-                        .getBoolean(R.styleable.PickerUI_autoDismiss,
+                        .getBoolean(R.styleable.PickerUI_p_autoDismiss,
                                 PickerUISettings.DEFAULT_AUTO_DISMISS);
                 itemsClickables = typedArray
-                        .getBoolean(R.styleable.PickerUI_itemsClickables,
+                        .getBoolean(R.styleable.PickerUI_p_itemsClickables,
                                 PickerUISettings.DEFAULT_ITEMS_CLICKABLES);
-                backgroundColorPanel = typedArray.getColor(R.styleable.PickerUI_backgroundColor,
+                backgroundColorPanel = typedArray.getColor(R.styleable.PickerUI_p_backgroundColor,
                         getResources().getColor(R.color.background_panel_pickerui));
-                colorLines = typedArray.getColor(R.styleable.PickerUI_linesCenterColor,
+                colorLines = typedArray.getColor(R.styleable.PickerUI_p_linesCenterColor,
                         getResources().getColor(R.color.lines_panel_pickerui));
                 mColorTextCenterListView = typedArray
-                        .getColor(R.styleable.PickerUI_textCenterColor,
+                        .getColor(R.styleable.PickerUI_p_textCenterColor,
                                 getResources().getColor(R.color.text_center_pickerui));
                 mColorTextNoCenterListView = typedArray
-                        .getColor(R.styleable.PickerUI_textNoCenterColor,
+                        .getColor(R.styleable.PickerUI_p_textNoCenterColor,
                                 getResources().getColor(R.color.text_no_center_pickerui));
 
                 int idItems;
-                idItems = typedArray.getResourceId(R.styleable.PickerUI_entries, -1);
+                idItems = typedArray.getResourceId(R.styleable.PickerUI_p_entries, -1);
                 if (idItems != -1) {
                     setItems(mContext, Arrays.asList(getResources().getStringArray(idItems)));
                 }

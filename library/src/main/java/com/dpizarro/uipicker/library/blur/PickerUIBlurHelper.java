@@ -112,14 +112,14 @@ public class PickerUIBlurHelper {
 
         if (typedArray != null) {
             try {
-                mUseBlur = typedArray.getBoolean(R.styleable.PickerUI_blur,
+                mUseBlur = typedArray.getBoolean(R.styleable.PickerUI_p_blur,
                         PickerUIBlur.DEFAULT_USE_BLUR);
-                mBlurRadius = typedArray.getInteger(R.styleable.PickerUI_blur_radius,
+                mBlurRadius = typedArray.getInteger(R.styleable.PickerUI_p_blur_radius,
                         PickerUIBlur.DEFAULT_BLUR_RADIUS);
-                mDownScaleFactor = typedArray.getFloat(R.styleable.PickerUI_blur_downScaleFactor,
+                mDownScaleFactor = typedArray.getFloat(R.styleable.PickerUI_p_blur_downScaleFactor,
                         PickerUIBlur.DEFAULT_DOWNSCALE_FACTOR);
-                mFilterColor = typedArray.getColor(R.styleable.PickerUI_blur_FilterColor, -1);
-                mUseRenderScript = typedArray.getBoolean(R.styleable.PickerUI_blur_use_renderscript,
+                mFilterColor = typedArray.getColor(R.styleable.PickerUI_p_blur_FilterColor, -1);
+                mUseRenderScript = typedArray.getBoolean(R.styleable.PickerUI_p_blur_use_renderscript,
                         PickerUIBlur.DEFAULT_USE_BLUR_RENDERSCRIPT);
 
             } catch (Exception e) {

@@ -2,24 +2,24 @@
 <resources>
     <declare-styleable name="PickerUI">
         <!-- to use in PickerUI in the panel -->
-        <attr name="backgroundColor"    format="color"/>
-        <attr name="linesCenterColor"   format="color"/>
+        <attr name="p_backgroundColor"    format="color"/>
+        <attr name="p_linesCenterColor"   format="color"/>
 
         <!-- to use in PickerUIListView -->
-        <attr name="autoDismiss"        format="boolean"/>
-        <attr name="itemsClickables"    format="boolean"/>
-        <attr name="entries"            format="reference"/>
+        <attr name="p_autoDismiss"        format="boolean"/>
+        <attr name="p_itemsClickables"    format="boolean"/>
+        <attr name="p_entries"            format="reference"/>
 
         <!-- to use in PickerUI in the PickerUIListView by PickerUIAdapter -->
-        <attr name="textCenterColor"    format="color"/>
-        <attr name="textNoCenterColor"  format="color"/>
+        <attr name="p_textCenterColor"    format="color"/>
+        <attr name="p_textNoCenterColor"  format="color"/>
 
         <!-- Blur Attributes -->
-        <attr name="blur"                   format="boolean"/>
-        <attr name="blur_downScaleFactor"   format="float"/>
-        <attr name="blur_FilterColor"       format="color"/>
-        <attr name="blur_radius"            format="integer"/>
-        <attr name="blur_use_renderscript"  format="boolean"/>
+        <attr name="p_blur"                   format="boolean"/>
+        <attr name="p_blur_downScaleFactor"   format="float"/>
+        <attr name="p_blur_FilterColor"       format="color"/>
+        <attr name="p_blur_radius"            format="integer"/>
+        <attr name="p_blur_use_renderscript"  format="boolean"/>
 
     </declare-styleable>
 </resources>
