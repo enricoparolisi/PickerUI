@@ -299,8 +299,12 @@ public class PickerUIBlurHelper {
                 @Override
                 public void run() {
                     // Add the ImageView with blurred view
-                    ((ViewGroup) mRootView.getChildAt(0))
-                            .addView(mBlurredImageView, mRootView.getChildCount() + 1);
+                    try {
+                        ((ViewGroup) mRootView.getChildAt(0))
+                                .addView(mBlurredImageView, mRootView.getChildCount() - 1);
+                    } catch (Exception ex) {
+                        
+                    }
                 }
             });
         }
