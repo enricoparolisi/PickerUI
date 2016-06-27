@@ -72,7 +72,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
     private PickerUIListView mPickerSecondUIListView;
     private PickerUISelectedItemsListener mItemsSelectedListenerPickerUI;
     private ViewGroup decorView;
-    private ViewGroup rootView;
+    private View overlay;
     private View view;
 
 
@@ -118,6 +118,8 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
     }
 
     private void onAttached(View view) {
+        overlay = LayoutInflater.from(mContext).inflate(R.layout.overlay, null);
+        decorView.addView(overlay);
         decorView.addView(view);
     }
 
@@ -281,6 +283,7 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
             @Override
             public void onAnimationEnd(Animation animation) {
                 decorView.removeView(view);
+                decorView.removeView(overlay);
 
                 // Hide the panel
                 mHiddenPanelPickerUI.setVisibility(View.GONE);
