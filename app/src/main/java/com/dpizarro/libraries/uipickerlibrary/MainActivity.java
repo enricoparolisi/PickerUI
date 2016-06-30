@@ -41,14 +41,14 @@ public class MainActivity extends ActionBarActivity {
         options = Arrays.asList(getResources().getStringArray(R.array.countries_array));
 
         //Populate list
-        mPickerUI.setItems(this, options);
-        mPickerUI.setSecondaryItems(this, options);
         mPickerUI.setColorTextCenter(R.color.background_picker);
         mPickerUI.setColorTextNoCenter(R.color.background_picker);
         mPickerUI.setBackgroundColorPanel(R.color.background_picker);
         mPickerUI.setLinesColor(R.color.background_picker);
         mPickerUI.setItemsClickables(false);
         mPickerUI.setAutoDismiss(false);
+        mPickerUI.setItems(this, options);
+        mPickerUI.setSecondaryItems(this, options);
 
         mPickerUI.setOnSelectedItemsPickerUIListener(new PickerUI.PickerUISelectedItemsListener() {
             @Override

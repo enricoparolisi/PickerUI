@@ -486,27 +486,18 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
      * @param color the color of the text
      */
     public void setColorTextCenter(int color) {
+        int newColor;
+        try {
+            newColor = getResources().getColor(color);
+        } catch (Resources.NotFoundException e) {
+            newColor = color;
+        }
+        mColorTextCenterListView = newColor;
         if (mPickerUIListView != null && mPickerUIListView.getPickerUIAdapter() != null) {
-
-            int newColor;
-            try {
-                newColor = getResources().getColor(color);
-            } catch (Resources.NotFoundException e) {
-                newColor = color;
-            }
-            mColorTextCenterListView = newColor;
-            mPickerUIListView.getPickerUIAdapter().setColorTextCenter(newColor);
+            mPickerUIListView.getPickerUIAdapter().setColorTextCenter(mColorTextCenterListView);
         }
         if (mPickerSecondUIListView != null && mPickerSecondUIListView.getPickerUIAdapter() != null) {
-
-            int newColor;
-            try {
-                newColor = getResources().getColor(color);
-            } catch (Resources.NotFoundException e) {
-                newColor = color;
-            }
-            mColorTextCenterListView = newColor;
-            mPickerSecondUIListView.getPickerUIAdapter().setColorTextCenter(newColor);
+            mPickerSecondUIListView.getPickerUIAdapter().setColorTextCenter(mColorTextCenterListView);
         }
     }
 
@@ -516,25 +507,18 @@ public class PickerUI extends RelativeLayout implements PickerUIBlurHelper.BlurF
      * @param color the color of the text
      */
     public void setColorTextNoCenter(int color) {
+        int newColor;
+        try {
+            newColor = getResources().getColor(color);
+        } catch (Resources.NotFoundException e) {
+            newColor = color;
+        }
+        mColorTextNoCenterListView = newColor;
         if (mPickerUIListView != null && mPickerUIListView.getPickerUIAdapter() != null) {
-            int newColor;
-            try {
-                newColor = getResources().getColor(color);
-            } catch (Resources.NotFoundException e) {
-                newColor = color;
-            }
-            mColorTextNoCenterListView = newColor;
-            mPickerUIListView.getPickerUIAdapter().setColorTextNoCenter(newColor);
+            mPickerUIListView.getPickerUIAdapter().setColorTextNoCenter(mColorTextNoCenterListView);
         }
         if (mPickerSecondUIListView != null && mPickerSecondUIListView.getPickerUIAdapter() != null) {
-            int newColor;
-            try {
-                newColor = getResources().getColor(color);
-            } catch (Resources.NotFoundException e) {
-                newColor = color;
-            }
-            mColorTextNoCenterListView = newColor;
-            mPickerSecondUIListView.getPickerUIAdapter().setColorTextNoCenter(newColor);
+            mPickerSecondUIListView.getPickerUIAdapter().setColorTextNoCenter(mColorTextNoCenterListView);
         }
     }
 
